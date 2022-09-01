@@ -1,1 +1,1 @@
-export { TUBES, parser } from './parser/parser';
+export { TUBES, parser } from './parser';
