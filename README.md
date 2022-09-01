@@ -8,10 +8,10 @@ Here you find functions to parse videos and searchresults from popular tubes.
 import { TUBES, parser } from 'tube-utils';
 
 // video data
-const videos = await parser.parseVideo(TUBES.XNXX, 'id');
+const videoData = await parser.parseVideo(TUBES.XNXX, 'id');
 
 // searchresult data
-const videos = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
+const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
 ```
 
 ### Currently supported tubes
