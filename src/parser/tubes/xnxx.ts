@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { TubeSearch, TubeVideo } from '../..';
+import { TubeSearch, TubeVideo } from '../../types';
 import { extract_data, loadHtml } from '../utils';
 
 export const search = async (
