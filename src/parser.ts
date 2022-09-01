@@ -3,6 +3,7 @@ import { search, video } from './tubes/xnxx';
 export enum TUBES {
   XVIDEOS,
   XNXX,
+  XHAMSTER,
 }
 
 export class Parser {
