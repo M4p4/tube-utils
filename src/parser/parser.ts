@@ -1,4 +1,4 @@
-import { search } from './tubes/xnxx';
+import { search, video } from './tubes/xnxx';
 
 export enum TUBES {
   XVIDEOS,
@@ -26,7 +26,7 @@ export class Parser {
   parseVideo = async (tube: TUBES, videoId: string) => {
     switch (tube) {
       case TUBES.XNXX:
-        return 'lol';
+        return video(videoId, this.userAgent);
       case TUBES.XVIDEOS:
         return 'lol';
       default:

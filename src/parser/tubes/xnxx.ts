@@ -1,6 +1,5 @@
-import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { extract_data } from '../utils';
+import { extract_data, loadHtml } from '../utils';
 
 export const search = async (
   keyword: string,
@@ -16,14 +15,7 @@ export const search = async (
   }
 
   try {
-    const res = await axios.get(url, {
-      headers: {
-        'User-Agent': userAgent,
-      },
-    });
-
-    const $ = cheerio.load(res.data);
-
+    const { $, data } = await loadHtml(url, userAgent);
     let videos = [];
 
     $('.thumb-block').map((i, element) => {
@@ -33,17 +25,19 @@ export const search = async (
       if (!videoLink.includes('video-')) return;
 
       const id = extract_data(videoLink, 'video-', '/');
-      const img = $v('img').attr('data-src');
+      const thumb = $v('img').attr('data-src');
       const channel = $v('span.name').text() || '';
       const title = $v('.thumb-under a').attr('title').trim();
       const metaData = $v('p.metadata').text();
       const d = metaData.split(' ');
       const views = d[0].trim();
       const duration = d[1].split('\n')[1].replace('min', ' min');
+      const poster = thumb.replace('thumbs169xnxxll', 'thumbs169xnxxposter');
 
       const video = {
         id,
-        img,
+        thumb,
+        poster,
         channel,
         title,
         views,
@@ -51,11 +45,69 @@ export const search = async (
       };
       videos.push(video);
     });
-
     return videos;
   } catch (e: any) {
     console.error(e.message);
   }
 };
 
-search('xxx', 1, 'useragent');
+export const video = async (videoId: string, userAgent: string) => {
+  const url = `https://www.xnxx.com/video-${videoId}/-`;
+
+  try {
+    const { $, data } = await loadHtml(url, userAgent);
+
+    const title = $('meta[property="og:title"]').attr('content');
+    const thumb = $('meta[property="og:image"]').attr('content');
+    const poster = thumb.replace('thumbs169xnxxll', 'thumbs169xnxxposter');
+    const duration = $('meta[property="og:duration"]').attr('content');
+    const xvideosId = extract_data(
+      $('#copy-video-embed').attr('value'),
+      'https://www.xnxx.com/embedframe/',
+      '"'
+    );
+
+    // tags
+    let tags = [];
+    $('.video-tags a').map((i, element) => {
+      const $v = cheerio.load(element);
+      const tag = $v.text().trim();
+      if (tag.length > 1 && tags.indexOf(tag) == -1) {
+        tags.push(tag);
+      }
+    });
+
+    // related videos
+    const jsonData = extract_data(data, 'var video_related=', ';window.');
+    const related = JSON.parse(jsonData);
+    let relatedVideos = [];
+    related.map((relatedVideo) => {
+      const video = {
+        id: extract_data(relatedVideo['u'], 'video-', '/'),
+        thumb: relatedVideo['i'].replace('thumbs169xnxx', 'thumbs169xnxxll'),
+        poster: relatedVideo['i'].replace(
+          'thumbs169xnxxll',
+          'thumbs169xnxxposter'
+        ),
+        channel: '',
+        title: relatedVideo['tf'],
+        views: relatedVideo['n'],
+        duration: relatedVideo['d'].replace('min', ' min'),
+      };
+      relatedVideos.push(video);
+    });
+
+    const video = {
+      id: videoId,
+      xvideosId,
+      title,
+      duration,
+      thumb,
+      poster,
+      tags,
+      relatedVideos,
+    };
+  } catch (e: any) {
+    console.error(e.message);
+  }
+};
