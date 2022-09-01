@@ -1,11 +1,12 @@
 import * as cheerio from 'cheerio';
+import { TubeSearch, TubeVideo } from '../..';
 import { extract_data, loadHtml } from '../utils';
 
 export const search = async (
   keyword: string,
   page: number,
   userAgent: string
-) => {
+): Promise<TubeSearch[]> => {
   const queryPage = page - 1;
   let url = 'https://www.xnxx.com/search/';
   if (queryPage === 0) {
@@ -16,7 +17,7 @@ export const search = async (
 
   try {
     const { $, data } = await loadHtml(url, userAgent);
-    let videos = [];
+    let videos = [] as TubeSearch[];
 
     $('.thumb-block').map((i, element) => {
       const $v = cheerio.load(element);
@@ -51,7 +52,10 @@ export const search = async (
   }
 };
 
-export const video = async (videoId: string, userAgent: string) => {
+export const video = async (
+  videoId: string,
+  userAgent: string
+): Promise<TubeVideo> => {
   const url = `https://www.xnxx.com/video-${videoId}/-`;
 
   try {
@@ -80,7 +84,7 @@ export const video = async (videoId: string, userAgent: string) => {
     // related videos
     const jsonData = extract_data(data, 'var video_related=', ';window.');
     const related = JSON.parse(jsonData);
-    let relatedVideos = [];
+    let relatedVideos = [] as TubeSearch[];
     related.map((relatedVideo) => {
       const video = {
         id: extract_data(relatedVideo['u'], 'video-', '/'),
@@ -93,7 +97,7 @@ export const video = async (videoId: string, userAgent: string) => {
         title: relatedVideo['tf'],
         views: relatedVideo['n'],
         duration: relatedVideo['d'].replace('min', ' min'),
-      };
+      } as TubeSearch;
       relatedVideos.push(video);
     });
 
@@ -106,7 +110,8 @@ export const video = async (videoId: string, userAgent: string) => {
       poster,
       tags,
       relatedVideos,
-    };
+    } as TubeVideo;
+    return video;
   } catch (e: any) {
     console.error(e.message);
   }
