@@ -26,7 +26,7 @@ export class Parser {
   parseVideo = async (tube: TUBES, videoId: string) => {
     switch (tube) {
       case TUBES.XNXX:
-        return video(videoId, this.userAgent);
+        return await video(videoId, this.userAgent);
       case TUBES.XVIDEOS:
         return 'lol';
       default:
