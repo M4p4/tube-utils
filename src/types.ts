@@ -3,7 +3,6 @@ export type TubeVideo = {
   xvideosId?: string;
   title: string;
   duration: string;
-  views: string;
   thumb: string;
   poster: string;
   tags: string[];

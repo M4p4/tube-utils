@@ -1,12 +1,14 @@
 import xnxx from './tubes/xnxx';
 import xvideos from './tubes/xvideos';
 import xhamster from './tubes/xhamster';
+import spankbang from './tubes/spankbang';
 import { RelatedKeywords } from './types';
 
 export enum TUBES {
   XVIDEOS,
   XNXX,
   XHAMSTER,
+  SPANKBANG,
 }
 
 export class Parser {
@@ -24,6 +26,8 @@ export class Parser {
     res = res.concat(xvideosRes.relatedKeywords);
     const xhamsterRes = await xhamster.search(keyword, 1, this.userAgent);
     res = res.concat(xhamsterRes.relatedKeywords);
+    const spankbangRes = await spankbang.search(keyword, 1, this.userAgent);
+    res = res.concat(spankbangRes.relatedKeywords);
 
     const filteredRelatedKeywords = [] as RelatedKeywords[];
     [...new Set(res)].forEach((item) => {
@@ -46,6 +50,8 @@ export class Parser {
         return await xvideos.search(keyword, page, this.userAgent);
       case TUBES.XHAMSTER:
         return await xhamster.search(keyword, page, this.userAgent);
+      case TUBES.SPANKBANG:
+        return await spankbang.search(keyword, page, this.userAgent);
       default:
         throw new Error('Tube does not exists');
     }
@@ -59,6 +65,8 @@ export class Parser {
         return await xvideos.video(videoId, this.userAgent);
       case TUBES.XHAMSTER:
         return await xhamster.video(videoId, this.userAgent);
+      case TUBES.SPANKBANG:
+        return await spankbang.video(videoId, this.userAgent);
       default:
         throw new Error('Tube does not exists');
     }

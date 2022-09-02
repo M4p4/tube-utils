@@ -82,3 +82,4 @@ const keywords = await parser.getRelatedKeywords('foo');
 - xnxx
 - xvideos
 - xhamster
+- spankbang
