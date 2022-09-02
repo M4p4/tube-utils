@@ -8,7 +8,6 @@ First install per npm by running:
 
 ```
 npm install tube-utils
-
 ```
 
 then you can use the parser in your js/ts project:
