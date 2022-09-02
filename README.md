@@ -18,6 +18,11 @@ import { TUBES, parser } from 'tube-utils';
 // video data
 // params: tube, videoId
 const videoData = await parser.parseVideo(TUBES.XNXX, 'id');
+/* Result:
+
+
+
+*/
 
 // search results data
 // params: tube, keyword, page
