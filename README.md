@@ -4,6 +4,15 @@ Here you find functions to parse video data and search results data from popular
 
 ### Usage
 
+First install per npm by running:
+
+```
+npm install tube-utils
+
+```
+
+then you can use the parser in your js/ts project:
+
 ```ts
 import { TUBES, parser } from 'tube-utils';
 
