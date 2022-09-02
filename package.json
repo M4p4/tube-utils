@@ -1,6 +1,6 @@
 {
   "name": "tube-utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Module to extract data from popular tube sites.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
