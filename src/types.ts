@@ -6,6 +6,7 @@ export type TubeVideo = {
   thumb: string;
   poster: string;
   tags: string[];
+  pornstars?: string[];
   relatedVideos: TubeSearch[];
 };
 

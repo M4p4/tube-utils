@@ -1,13 +1,20 @@
 {
   "name": "tube-utils",
   "version": "1.0.0",
-  "description": "",
+  "description": "Module to extract data from popular tube sites.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepare": "npm run build"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M4p4/tube-utils.git"
+  },
+  "author": "M4p4",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
