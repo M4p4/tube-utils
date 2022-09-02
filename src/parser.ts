@@ -2,7 +2,7 @@ import xnxx from './tubes/xnxx';
 import xvideos from './tubes/xvideos';
 import xhamster from './tubes/xhamster';
 import spankbang from './tubes/spankbang';
-import { RelatedKeywords } from './types';
+import { RelatedKeywords, TubeSearch } from './types';
 
 export enum TUBES {
   XVIDEOS,
@@ -12,22 +12,47 @@ export enum TUBES {
 }
 
 export class Parser {
-  private userAgent: string;
+  private _userAgent: string;
+  private _allTubes = [
+    TUBES.SPANKBANG,
+    TUBES.XNXX,
+    TUBES.XVIDEOS,
+    TUBES.XHAMSTER,
+  ];
   constructor() {
-    this.userAgent =
+    this._userAgent =
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
   }
 
-  getRelatedKeywords = async (keyword: string): Promise<RelatedKeywords[]> => {
+  private _mapTube = (tube: TUBES) => {
+    switch (tube) {
+      case TUBES.XNXX:
+        return xnxx;
+      case TUBES.XVIDEOS:
+        return xvideos;
+      case TUBES.XHAMSTER:
+        return xhamster;
+      case TUBES.SPANKBANG:
+        return spankbang;
+      default:
+        throw new Error('Tube does not exists');
+    }
+  };
+
+  getRelatedKeywords = async (
+    keyword: string,
+    tubes = this._allTubes
+  ): Promise<RelatedKeywords[]> => {
     let res = [] as string[];
-    const xnxxRes = await xnxx.search(keyword, 1, this.userAgent);
-    res = res.concat(xnxxRes.relatedKeywords);
-    const xvideosRes = await xvideos.search(keyword, 1, this.userAgent);
-    res = res.concat(xvideosRes.relatedKeywords);
-    const xhamsterRes = await xhamster.search(keyword, 1, this.userAgent);
-    res = res.concat(xhamsterRes.relatedKeywords);
-    const spankbangRes = await spankbang.search(keyword, 1, this.userAgent);
-    res = res.concat(spankbangRes.relatedKeywords);
+
+    for (let tube of tubes) {
+      const tmpRes = (await this._mapTube(tube as unknown as TUBES).search(
+        keyword,
+        1,
+        this._userAgent
+      )) as TubeSearch;
+      res = res.concat(tmpRes.relatedKeywords);
+    }
 
     const filteredRelatedKeywords = [] as RelatedKeywords[];
     [...new Set(res)].forEach((item) => {
@@ -43,35 +68,12 @@ export class Parser {
   };
 
   parseSearch = async (tube: TUBES, keyword: string, page: number = 1) => {
-    switch (tube) {
-      case TUBES.XNXX:
-        return await xnxx.search(keyword, page, this.userAgent);
-      case TUBES.XVIDEOS:
-        return await xvideos.search(keyword, page, this.userAgent);
-      case TUBES.XHAMSTER:
-        return await xhamster.search(keyword, page, this.userAgent);
-      case TUBES.SPANKBANG:
-        return await spankbang.search(keyword, page, this.userAgent);
-      default:
-        throw new Error('Tube does not exists');
-    }
+    this._mapTube(tube).search(keyword, page, this._userAgent);
   };
 
   parseVideo = async (tube: TUBES, videoId: string) => {
-    switch (tube) {
-      case TUBES.XNXX:
-        return await xnxx.video(videoId, this.userAgent);
-      case TUBES.XVIDEOS:
-        return await xvideos.video(videoId, this.userAgent);
-      case TUBES.XHAMSTER:
-        return await xhamster.video(videoId, this.userAgent);
-      case TUBES.SPANKBANG:
-        return await spankbang.video(videoId, this.userAgent);
-      default:
-        throw new Error('Tube does not exists');
-    }
+    this._mapTube(tube).video(videoId, this._userAgent);
   };
 }
 
 export const parser = new Parser();
-parser.getRelatedKeywords('pinay');
