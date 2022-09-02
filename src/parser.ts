@@ -1,6 +1,7 @@
 import xnxx from './tubes/xnxx';
 import xvideos from './tubes/xvideos';
 import xhamster from './tubes/xhamster';
+import { RelatedKeywords } from './types';
 
 export enum TUBES {
   XVIDEOS,
@@ -15,7 +16,7 @@ export class Parser {
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
   }
 
-  getRelatedKeywords = async (keyword: string): Promise<string[]> => {
+  getRelatedKeywords = async (keyword: string): Promise<RelatedKeywords[]> => {
     let res = [] as string[];
     const xnxxRes = await xnxx.search(keyword, 1, this.userAgent);
     res = res.concat(xnxxRes.relatedKeywords);
@@ -23,7 +24,18 @@ export class Parser {
     res = res.concat(xvideosRes.relatedKeywords);
     const xhamsterRes = await xhamster.search(keyword, 1, this.userAgent);
     res = res.concat(xhamsterRes.relatedKeywords);
-    return [...new Set(res)];
+
+    const filteredRelatedKeywords = [] as RelatedKeywords[];
+    [...new Set(res)].forEach((item) => {
+      const popularity = res.filter(function (resItem) {
+        return resItem === item;
+      }).length;
+      filteredRelatedKeywords.push({ keyword: item, popularity });
+    });
+    filteredRelatedKeywords.sort((a, b) => {
+      return b.popularity - a.popularity;
+    });
+    return filteredRelatedKeywords;
   };
 
   parseSearch = async (tube: TUBES, keyword: string, page: number = 1) => {
@@ -54,3 +66,4 @@ export class Parser {
 }
 
 export const parser = new Parser();
+parser.getRelatedKeywords('pinay');

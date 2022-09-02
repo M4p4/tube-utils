@@ -25,3 +25,8 @@ export type TubeSearch = {
   relatedKeywords: string[];
   videos: RelatedVideos[];
 };
+
+export type RelatedKeywords = {
+  keyword: string;
+  popularity: number;
+};

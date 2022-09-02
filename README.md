@@ -70,7 +70,8 @@ const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
 const keywords = await parser.getRelatedKeywords('foo');
 /*
 [
-  'bar',
+  { keyword: 'foo', popularity: 4 },
+  { keyword: 'foo bar', popularity: 3 },
   ...
 ]
 */
