@@ -8,9 +8,11 @@ Here you find functions to parse video data and search results data from popular
 import { TUBES, parser } from 'tube-utils';
 
 // video data
+// params: tube, videoId
 const videoData = await parser.parseVideo(TUBES.XNXX, 'id');
 
 // search results data
+// params: tube, keyword, page
 const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
 ```
 
