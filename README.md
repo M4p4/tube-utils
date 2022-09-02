@@ -1,6 +1,6 @@
 # tube-utils
 
-Here you find functions to parse videos and searchresults from popular tubes.
+Here you find functions to parse video data and search results data from popular tubes.
 
 ### Usage
 
@@ -10,7 +10,7 @@ import { TUBES, parser } from 'tube-utils';
 // video data
 const videoData = await parser.parseVideo(TUBES.XNXX, 'id');
 
-// searchresult data
+// search results data
 const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
 ```
 
