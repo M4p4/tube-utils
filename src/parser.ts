@@ -1,4 +1,6 @@
-import { search, video } from './tubes/xnxx';
+import xnxx from './tubes/xnxx';
+import xvideos from './tubes/xvideos';
+import xhamster from './tubes/xhamster';
 
 export enum TUBES {
   XVIDEOS,
@@ -16,9 +18,11 @@ export class Parser {
   parseSearch = async (tube: TUBES, keyword: string, page: number) => {
     switch (tube) {
       case TUBES.XNXX:
-        return await search(keyword, page, this.userAgent);
+        return await xnxx.search(keyword, page, this.userAgent);
       case TUBES.XVIDEOS:
-        return 'lol';
+        return await xvideos.search(keyword, page, this.userAgent);
+      case TUBES.XHAMSTER:
+        return await xhamster.search(keyword, page, this.userAgent);
       default:
         throw new Error('Tube does not exists');
     }
@@ -27,9 +31,11 @@ export class Parser {
   parseVideo = async (tube: TUBES, videoId: string) => {
     switch (tube) {
       case TUBES.XNXX:
-        return await video(videoId, this.userAgent);
+        return await xnxx.video(videoId, this.userAgent);
       case TUBES.XVIDEOS:
-        return 'lol';
+        return await xvideos.video(videoId, this.userAgent);
+      case TUBES.XHAMSTER:
+        return await xhamster.video(videoId, this.userAgent);
       default:
         throw new Error('Tube does not exists');
     }

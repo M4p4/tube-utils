@@ -1,7 +1,7 @@
 import { TubeSearch, TubeVideo } from '../types';
 import { extract_data, loadHtml } from '../utils';
 
-export const search = async (
+const search = async (
   keyword: string,
   page: number,
   userAgent: string
@@ -49,7 +49,7 @@ export const search = async (
   }
 };
 
-export const video = async (
+const video = async (
   videoId: string,
   userAgent: string
 ): Promise<TubeVideo> => {
@@ -123,3 +123,10 @@ export const video = async (
     console.error(e.message);
   }
 };
+
+const xnxx = {
+  search,
+  video,
+};
+
+export default xnxx;

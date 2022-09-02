@@ -1,7 +1,7 @@
 import { TubeSearch, TubeVideo } from '../types';
 import { loadHtml, extract_data } from '../utils';
 
-export const search = async (
+const search = async (
   keyword: string,
   page: number,
   userAgent: string
@@ -51,7 +51,7 @@ export const search = async (
   }
 };
 
-export const video = async (
+const video = async (
   videoId: string,
   userAgent: string
 ): Promise<TubeVideo> => {
@@ -79,7 +79,7 @@ export const video = async (
       }
     });
 
-    // tags
+    // pornstars
     let pornstars = [];
     $('.video-tags-list a').map((i, element) => {
       const tag = $(element).find('.name').text().trim();
@@ -127,4 +127,9 @@ export const video = async (
   }
 };
 
-video('72080022', 'xxx');
+const xvideos = {
+  search,
+  video,
+};
+
+export default xvideos;
