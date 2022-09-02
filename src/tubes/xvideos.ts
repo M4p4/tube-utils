@@ -1,6 +1,5 @@
 import { TubeSearch, TubeVideo } from '../types';
 import { loadHtml, extract_data } from '../utils';
-import * as cheerio from 'cheerio';
 
 export const search = async (
   keyword: string,
@@ -19,17 +18,18 @@ export const search = async (
     let videos = [] as TubeSearch[];
 
     $('.thumb-block').map((i, element) => {
-      const $v = cheerio.load(element);
-
-      const videoLink = $v('a').attr('href');
+      const videoLink = $(element).find('a').attr('href');
       if (!videoLink.includes('/video')) return;
 
       const id = extract_data(videoLink, '/video', '/');
-      const thumb = $v('img').attr('data-src').replace('THUMBNUM', '5');
-      const channel = $v('span.name').text() || '';
-      const title = $v('.thumb-under a').attr('title').trim();
-      const metaData = $v('span.bg').text();
-      const duration = $v('span.bg .duration').text().trim();
+      const thumb = $(element)
+        .find('img')
+        .attr('data-src')
+        .replace('THUMBNUM', '5');
+      const channel = $(element).find('span.name').text() || '';
+      const title = $(element).find('.thumb-under a').attr('title').trim();
+      const metaData = $(element).find('span.bg').text();
+      const duration = $(element).find('span.bg .duration').text().trim();
       const d = metaData.split('-');
       const views = d[1].replace('Views', '').trim();
       const poster = thumb.replace('thumbs169ll', 'thumbs169poster');
@@ -54,7 +54,7 @@ export const search = async (
 export const video = async (
   videoId: string,
   userAgent: string
-): Promise<any> => {
+): Promise<TubeVideo> => {
   const url = `https://www.xvideos.com/video${videoId}/-`;
 
   try {
@@ -79,6 +79,20 @@ export const video = async (
       }
     });
 
+    // tags
+    let pornstars = [];
+    $('.video-tags-list a').map((i, element) => {
+      const tag = $(element).find('.name').text().trim();
+      const tagUrl = $(element).attr('href');
+      if (
+        (tagUrl.includes('models/') || tagUrl.includes('model/')) &&
+        tag.length > 1 &&
+        pornstars.indexOf(tag) == -1
+      ) {
+        pornstars.push(tag);
+      }
+    });
+
     // related videos
     const jsonData = extract_data(data, 'var video_related=', ';window.');
     const related = JSON.parse(jsonData);
@@ -93,7 +107,6 @@ export const video = async (
         views: relatedVideo['n'],
         duration: relatedVideo['d'],
       } as TubeSearch;
-      console.log(video);
       relatedVideos.push(video);
     });
 
@@ -103,15 +116,15 @@ export const video = async (
       duration,
       thumb,
       poster,
+      pornstars,
       tags,
       relatedVideos,
     } as TubeVideo;
 
-    console.log(video);
     return video;
   } catch (e: any) {
     console.error(e.message);
   }
 };
 
-video('56070137', 'xxx');
+video('72080022', 'xxx');

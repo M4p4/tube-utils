@@ -1,4 +1,3 @@
-import * as cheerio from 'cheerio';
 import { TubeSearch, TubeVideo } from '../types';
 import { extract_data, loadHtml } from '../utils';
 
@@ -20,16 +19,14 @@ export const search = async (
     let videos = [] as TubeSearch[];
 
     $('.thumb-block').map((i, element) => {
-      const $v = cheerio.load(element);
-
-      const videoLink = $v('a').attr('href');
+      const videoLink = $(element).find('a').attr('href');
       if (!videoLink.includes('video-')) return;
 
       const id = extract_data(videoLink, 'video-', '/');
-      const thumb = $v('img').attr('data-src');
-      const channel = $v('span.name').text() || '';
-      const title = $v('.thumb-under a').attr('title').trim();
-      const metaData = $v('p.metadata').text();
+      const thumb = $(element).find('img').attr('data-src');
+      const channel = $(element).find('span.name').text() || '';
+      const title = $(element).find('.thumb-under a').attr('title').trim();
+      const metaData = $(element).find('p.metadata').text();
       const d = metaData.split(' ');
       const views = d[0].trim();
       const duration = d[1].split('\n')[1].replace('min', ' min');
@@ -74,10 +71,20 @@ export const video = async (
     // tags
     let tags = [];
     $('.video-tags a').map((i, element) => {
-      const $v = cheerio.load(element);
-      const tag = $v.text().trim();
-      if (tag.length > 1 && tags.indexOf(tag) == -1) {
+      const tag = $(element).text().trim();
+      const isPornstar = $(element).hasClass('is-pornstar');
+      if (!isPornstar && tag.length > 1 && tags.indexOf(tag) == -1) {
         tags.push(tag);
+      }
+    });
+
+    // pornstars
+    let pornstars = [];
+    $('.video-tags a').map((i, element) => {
+      const tag = $(element).text().trim();
+      const isPornstar = $(element).hasClass('is-pornstar');
+      if (isPornstar && tag.length > 1 && pornstars.indexOf(tag) == -1) {
+        pornstars.push(tag);
       }
     });
 
