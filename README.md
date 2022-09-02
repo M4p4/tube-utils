@@ -64,6 +64,16 @@ const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
   ];
 }
 */
+
+// get related keywords for a given keyword by searching at all tubes
+// params: keyword
+const keywords = await parser.getRelatedKeywords('foo');
+/*
+[
+  'bar',
+  ...
+]
+*/
 ```
 
 ### Currently supported tubes

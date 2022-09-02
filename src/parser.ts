@@ -15,7 +15,18 @@ export class Parser {
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
   }
 
-  parseSearch = async (tube: TUBES, keyword: string, page: number) => {
+  getRelatedKeywords = async (keyword: string): Promise<string[]> => {
+    let res = [] as string[];
+    const xnxxRes = await xnxx.search(keyword, 1, this.userAgent);
+    res = res.concat(xnxxRes.relatedKeywords);
+    const xvideosRes = await xvideos.search(keyword, 1, this.userAgent);
+    res = res.concat(xvideosRes.relatedKeywords);
+    const xhamsterRes = await xhamster.search(keyword, 1, this.userAgent);
+    res = res.concat(xhamsterRes.relatedKeywords);
+    return [...new Set(res)];
+  };
+
+  parseSearch = async (tube: TUBES, keyword: string, page: number = 1) => {
     switch (tube) {
       case TUBES.XNXX:
         return await xnxx.search(keyword, page, this.userAgent);
@@ -43,4 +54,3 @@ export class Parser {
 }
 
 export const parser = new Parser();
-parser.parseSearch(TUBES.XNXX, 'pinay', 1);
