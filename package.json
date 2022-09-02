@@ -16,6 +16,10 @@
   },
   "author": "M4p4",
   "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12"
+  },
   "keywords": [
     "tube-parser",
     "parser",
@@ -25,8 +29,6 @@
   ],
   "homepage": "https://github.com/M4p4/tube-utils#readme",
   "devDependencies": {
-    "@types/node": "^18.7.14",
-    "axios": "^0.27.2",
-    "cheerio": "^1.0.0-rc.12"
+    "@types/node": "^18.7.14"
   }
 }
