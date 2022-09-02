@@ -19,14 +19,51 @@ import { TUBES, parser } from 'tube-utils';
 // params: tube, videoId
 const videoData = await parser.parseVideo(TUBES.XNXX, 'id');
 /* Result:
-
-
-
+{
+  id: string;
+  xvideosId?: string;
+  title: string;
+  duration: string;
+  views: string;
+  thumb: string;
+  poster: string;
+  tags: string[];
+  pornstars: string[];
+  relatedVideos: [
+    {
+      id: string;
+      thumb: string;
+      title: string;
+      views: string;
+      duration: string;
+      channel?: string;
+      poster?: string;
+    },
+    ...
+  ];
+}
 */
 
 // search results data
 // params: tube, keyword, page
 const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
+/* Result:
+{
+  relatedKeywords: string[];
+  videos: [
+    {
+      id: string;
+      thumb: string;
+      title: string;
+      views: string;
+      duration: string;
+      channel?: string;
+      poster?: string;
+    },
+    ...
+  ];
+}
+*/
 ```
 
 ### Currently supported tubes

@@ -1,11 +1,11 @@
-import { TubeSearch, TubeVideo } from '../types';
+import { RelatedVideos, TubeSearch, TubeVideo } from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
   keyword: string,
   page: number,
   userAgent: string
-): Promise<TubeSearch[]> => {
+): Promise<TubeSearch> => {
   let url = 'https://xhamster3.com/search/';
   if (page === 1) {
     url += `${keyword.trim().replace(' ', '+')}`;
@@ -15,11 +15,11 @@ const search = async (
 
   try {
     const { $, data } = await loadHtml(url, userAgent);
-    let videos = [] as TubeSearch[];
+    let videos = [] as RelatedVideos[];
 
     $('.thumb-list__item').map((i, element) => {
       const videoLink = $(element).find('a').attr('href');
-      if (!videoLink.includes('/videos/')) return;
+      if (!videoLink || !videoLink.includes('/videos/')) return;
 
       const id = videoLink.substring(videoLink.lastIndexOf('-') + 1);
       const thumb = $(element).find('img').attr('src');
@@ -39,7 +39,16 @@ const search = async (
       };
       videos.push(video);
     });
-    return videos;
+
+    let relatedKeywords = [] as string[];
+
+    $('.categories-container span.item-name').map((i, element) => {
+      const tag = $(element).text().toLocaleLowerCase().trim();
+      relatedKeywords.push(tag);
+    });
+
+    const result = { relatedKeywords, videos };
+    return result;
   } catch (e: any) {
     console.error(e.message);
   }
@@ -92,7 +101,7 @@ const video = async (
     });
 
     // related videos
-    let relatedVideos = [] as TubeSearch[];
+    let relatedVideos = [] as RelatedVideos[];
     $('.thumb-list__item').map((i, element) => {
       const videoLink = $(element).find('a').attr('href');
       if (!videoLink.includes('/videos/')) return;

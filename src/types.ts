@@ -3,19 +3,25 @@ export type TubeVideo = {
   xvideosId?: string;
   title: string;
   duration: string;
+  views: string;
   thumb: string;
   poster: string;
   tags: string[];
   pornstars: string[];
-  relatedVideos: TubeSearch[];
+  relatedVideos: RelatedVideos[];
 };
 
-export type TubeSearch = {
+export type RelatedVideos = {
   id: string;
   thumb: string;
-  poster?: string;
-  channel?: string;
   title: string;
   views: string;
   duration: string;
+  channel?: string;
+  poster?: string;
+};
+
+export type TubeSearch = {
+  relatedKeywords: string[];
+  videos: RelatedVideos[];
 };

@@ -43,3 +43,4 @@ export class Parser {
 }
 
 export const parser = new Parser();
+parser.parseSearch(TUBES.XNXX, 'pinay', 1);

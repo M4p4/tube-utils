@@ -1,11 +1,11 @@
-import { TubeSearch, TubeVideo } from '../types';
+import { RelatedVideos, TubeSearch, TubeVideo } from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
   keyword: string,
   page: number,
   userAgent: string
-): Promise<TubeSearch[]> => {
+): Promise<TubeSearch> => {
   const queryPage = page - 1;
   let url = 'https://www.xvideos.com/?k=';
   if (queryPage === 0) {
@@ -15,11 +15,11 @@ const search = async (
   }
   try {
     const { $, data } = await loadHtml(url, userAgent);
-    let videos = [] as TubeSearch[];
+    let videos = [] as RelatedVideos[];
 
     $('.thumb-block').map((i, element) => {
       const videoLink = $(element).find('a').attr('href');
-      if (!videoLink.includes('/video')) return;
+      if (!videoLink || !videoLink.includes('/video')) return;
 
       const id = extract_data(videoLink, '/video', '/');
       const thumb = $(element)
@@ -45,7 +45,17 @@ const search = async (
       };
       videos.push(video);
     });
-    return videos;
+    let relatedKeywords = [] as string[];
+
+    $('#search-associates span').map((i, element) => {
+      const tag = $(element).text().toLocaleLowerCase().trim();
+      if (tag.length > 1 && tag !== '...' && tag !== 'undefined') {
+        relatedKeywords.push(tag);
+      }
+    });
+
+    const result = { relatedKeywords, videos };
+    return result;
   } catch (e: any) {
     console.error(e.message);
   }
@@ -96,7 +106,7 @@ const video = async (
     // related videos
     const jsonData = extract_data(data, 'var video_related=', ';window.');
     const related = JSON.parse(jsonData);
-    let relatedVideos = [] as TubeSearch[];
+    let relatedVideos = [] as RelatedVideos[];
     related.map((relatedVideo) => {
       const video = {
         id: relatedVideo['id'].toString(),
@@ -106,7 +116,7 @@ const video = async (
         title: relatedVideo['tf'],
         views: relatedVideo['n'],
         duration: relatedVideo['d'],
-      } as TubeSearch;
+      } as RelatedVideos;
       relatedVideos.push(video);
     });
 
