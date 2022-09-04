@@ -2,6 +2,7 @@ import xnxx from './tubes/xnxx';
 import xvideos from './tubes/xvideos';
 import xhamster from './tubes/xhamster';
 import spankbang from './tubes/spankbang';
+import eporner from './tubes/eporner';
 import { RelatedKeywords, TubeSearch } from './types';
 
 export enum TUBES {
@@ -9,6 +10,7 @@ export enum TUBES {
   XNXX,
   XHAMSTER,
   SPANKBANG,
+  EPORNER,
 }
 
 export class Parser {
@@ -18,6 +20,7 @@ export class Parser {
     TUBES.XNXX,
     TUBES.XVIDEOS,
     TUBES.XHAMSTER,
+    TUBES.EPORNER,
   ];
   constructor() {
     this._userAgent =
@@ -34,6 +37,8 @@ export class Parser {
         return xhamster;
       case TUBES.SPANKBANG:
         return spankbang;
+      case TUBES.EPORNER:
+        return eporner;
       default:
         throw new Error('Tube does not exists');
     }

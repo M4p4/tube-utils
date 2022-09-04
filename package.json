@@ -1,6 +1,6 @@
 {
   "name": "tube-utils",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Module to extract data from popular tube sites.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,8 @@
     "parser",
     "xhamster",
     "xnxx",
-    "xvideos"
+    "xvideos",
+    "eporner"
   ],
   "homepage": "https://github.com/M4p4/tube-utils#readme",
   "devDependencies": {

@@ -6,26 +6,39 @@ const search = async (
   page: number,
   userAgent: string
 ): Promise<TubeSearch> => {
-  let url = 'https://spankbang.com/s/';
+  let url = 'https://www.eporner.com/search/';
   if (page === 1) {
-    url += `${keyword.trim().replace(' ', '%20')}`;
+    url += `${keyword.trim().replace(' ', '-')}`;
   } else {
-    url += `${keyword.trim().replace(' ', '%20')}/${page}`;
+    url += `${keyword.trim().replace(' ', '-')}/${page}`;
   }
 
   try {
     const { $, data } = await loadHtml(url, userAgent);
     let videos = [] as RelatedVideos[];
 
-    $('.video-item').map((i, element) => {
+    $('.mb').map((i, element) => {
       const videoLink = $(element).find('a').attr('href');
-      if (!videoLink || !videoLink.includes('/video/')) return;
 
-      const id = extract_data(videoLink, '/', '/video/');
+      if (
+        !videoLink ||
+        (!videoLink.includes('/video-') && !videoLink.includes('/hd-porn'))
+      )
+        return;
+
+      const id = extract_data(
+        videoLink.replace('/hd-porn/', '/video-'),
+        '/video-',
+        '/'
+      );
       const thumb = $(element).find('img').attr('data-src');
-      const title = $(element).find('a.n').text().trim();
-      const duration = $(element).find('span.l').text().trim();
-      const views = $(element).find('span.v').text().trim();
+      const title = $(element).find('p.mbtit').text().trim();
+      const duration = $(element).find('span.mbtim').text().trim();
+      const views = $(element)
+        .find('span.mbvie')
+        .text()
+        .replace(',', '')
+        .trim();
 
       //remove premium content
       if (!views || !duration) return;
@@ -42,7 +55,7 @@ const search = async (
 
     let relatedKeywords = [] as string[];
 
-    $('.related_keywords a').map((i, element) => {
+    $('li.bottomrelateditem a').map((i, element) => {
       const tag = $(element).text().toLocaleLowerCase().trim();
       relatedKeywords.push(tag);
     });
@@ -58,23 +71,25 @@ const video = async (
   videoId: string,
   userAgent: string
 ): Promise<TubeVideo> => {
-  const url = `https://spankbang.com/${videoId}/video/-`;
+  const url = `https://www.eporner.com/video-${videoId}/-`;
   try {
     const { $, data } = await loadHtml(url, userAgent);
 
-    const title = $('h1').attr('title').trim();
+    const title = $('meta[property="og:title"]')
+      .attr('content')
+      .replace('- EPORNER', '')
+      .trim();
     const thumb = $('meta[property="og:image"]').attr('content');
-    const poster = thumb.replace('w:500', 'w:800');
-    const duration = $('.hd-time span.i-length').text().trim();
-    //const views = $('span.i-plays').text().replace('plays', '').trim();
+    const poster = thumb.replace('_240', '_360');
+    const duration = $('span.vid-length').text().trim();
 
     // tags
     let tags = [];
-    $('div.cat a').map((i, element) => {
-      const tag = $(element).text().replace('(18+)', '').trim();
+    $('.video-info-tags a').map((i, element) => {
+      const tag = $(element).text().trim();
       const tagUrl = $(element).attr('href');
       if (
-        (tagUrl.includes('tag/') || tagUrl.includes('tags/')) &&
+        (tagUrl.includes('cat/') || tagUrl.includes('search/')) &&
         tag.length > 1 &&
         tags.indexOf(tag) == -1
       ) {
@@ -84,7 +99,7 @@ const video = async (
 
     // pornstars
     let pornstars = [];
-    $('div.cat a').map((i, element) => {
+    $('.video-info-tags a').map((i, element) => {
       const tag = $(element).text().trim();
       const tagUrl = $(element).attr('href');
       if (
@@ -100,16 +115,28 @@ const video = async (
     // related videos
     let relatedVideos = [] as RelatedVideos[];
 
-    $('.video-item').map((i, element) => {
+    $('.mb').map((i, element) => {
       const videoLink = $(element).find('a').attr('href');
-      if (!videoLink || !videoLink.includes('/video/')) return;
 
-      const id = extract_data(videoLink, '/', '/video/');
+      if (
+        !videoLink ||
+        (!videoLink.includes('/video-') && !videoLink.includes('/hd-porn'))
+      )
+        return;
+
+      const id = extract_data(
+        videoLink.replace('/hd-porn/', '/video-'),
+        '/video-',
+        '/'
+      );
       const thumb = $(element).find('img').attr('data-src');
-      const title = $(element).find('a.n').text().trim();
-      const duration = $(element).find('span.l').text().trim();
-      const views = $(element).find('span.v').text().trim();
-
+      const title = $(element).find('p.mbtit').text().trim();
+      const duration = $(element).find('span.mbtim').text().trim();
+      const views = $(element)
+        .find('span.mbvie')
+        .text()
+        .replace(',', '')
+        .trim();
       //remove premium content
       if (!views || !duration) return;
 
@@ -140,8 +167,8 @@ const video = async (
   }
 };
 
-const spankbang = {
+const eporner = {
   search,
   video,
 };
-export default spankbang;
+export default eporner;
