@@ -81,6 +81,10 @@ export class Parser {
   parseVideo = async (tube: TUBES, videoId: string) => {
     this._mapTube(tube).video(videoId, this._config);
   };
+
+  parseVideoSrc = async (tube: TUBES, videoId: string) => {
+    this._mapTube(tube).videoSrc(videoId, this._config);
+  };
 }
 
 export const parser = new Parser();

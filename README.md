@@ -65,6 +65,18 @@ const searchResults = await parser.parseSearch(TUBES.XNXX, 'keyword', 1);
 }
 */
 
+// get video Src (CDN Link)
+// Note: This function bypass security of the tubes and need sometimes an proxy
+// params: tube, videoId
+const videoSrcData = await parser.parseVideoSrc(TUBES.XNXX, 'id');
+/* Result:
+{
+  lowRes: 'https://cndlink.com/example_id.mp4',
+  highRes: 'https://cndlink.com/example_id.mp4',
+  hls: 'https://cdnlink.com/hls/v10/6293672-,240,360,480,720,1080,p.mp4.urlset/master.m3u8'
+}
+*/
+
 // get related keywords for a given keyword by searching at all tubes
 // params: keyword
 const keywords = await parser.getRelatedKeywords('foo');
