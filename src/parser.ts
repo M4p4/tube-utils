@@ -3,7 +3,7 @@ import xvideos from './tubes/xvideos';
 import xhamster from './tubes/xhamster';
 import spankbang from './tubes/spankbang';
 import eporner from './tubes/eporner';
-import { RelatedKeywords, TubeSearch } from './types';
+import { ParserConfig, RelatedKeywords, TubeSearch } from './types';
 
 export enum TUBES {
   XVIDEOS,
@@ -14,7 +14,12 @@ export enum TUBES {
 }
 
 export class Parser {
-  private _userAgent: string;
+  private _config: ParserConfig = {
+    userAgent:
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+    useProxy: false,
+    proxies: [],
+  };
   private _allTubes = [
     TUBES.SPANKBANG,
     TUBES.XNXX,
@@ -22,10 +27,7 @@ export class Parser {
     TUBES.XHAMSTER,
     TUBES.EPORNER,
   ];
-  constructor() {
-    this._userAgent =
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
-  }
+  constructor() {}
 
   private _mapTube = (tube: TUBES) => {
     switch (tube) {
@@ -54,7 +56,7 @@ export class Parser {
       const tmpRes = (await this._mapTube(tube as unknown as TUBES).search(
         keyword,
         1,
-        this._userAgent
+        this._config
       )) as TubeSearch;
       res = res.concat(tmpRes.relatedKeywords);
     }
@@ -73,11 +75,11 @@ export class Parser {
   };
 
   parseSearch = async (tube: TUBES, keyword: string, page: number = 1) => {
-    this._mapTube(tube).search(keyword, page, this._userAgent);
+    this._mapTube(tube).search(keyword, page, this._config);
   };
 
   parseVideo = async (tube: TUBES, videoId: string) => {
-    this._mapTube(tube).video(videoId, this._userAgent);
+    this._mapTube(tube).video(videoId, this._config);
   };
 }
 

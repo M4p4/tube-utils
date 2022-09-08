@@ -1,11 +1,12 @@
-import { RelatedVideos, TubeSearch, TubeVideo } from '../types';
+import { RelatedVideos, TubeSearch, TubeVideo, ParserConfig } from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
   keyword: string,
   page: number,
-  userAgent: string
+  config: ParserConfig
 ): Promise<TubeSearch> => {
+  const { userAgent } = config;
   let url = 'https://spankbang.com/s/';
   if (page === 1) {
     url += `${keyword.trim().replace(' ', '%20')}`;
@@ -56,8 +57,9 @@ const search = async (
 
 const video = async (
   videoId: string,
-  userAgent: string
+  config: ParserConfig
 ): Promise<TubeVideo> => {
+  const { userAgent } = config;
   const url = `https://spankbang.com/${videoId}/video/-`;
   try {
     const { $, data } = await loadHtml(url, userAgent);

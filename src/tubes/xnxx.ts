@@ -1,11 +1,12 @@
-import { RelatedVideos, TubeSearch, TubeVideo } from '../types';
+import { RelatedVideos, TubeSearch, TubeVideo, ParserConfig } from '../types';
 import { extract_data, loadHtml } from '../utils';
 
 const search = async (
   keyword: string,
   page: number,
-  userAgent: string
+  config: ParserConfig
 ): Promise<TubeSearch> => {
+  const { userAgent } = config;
   const queryPage = page - 1;
   let url = 'https://www.xnxx.com/search/';
   if (queryPage === 0) {
@@ -61,8 +62,9 @@ const search = async (
 
 const video = async (
   videoId: string,
-  userAgent: string
+  config: ParserConfig
 ): Promise<TubeVideo> => {
+  const { userAgent } = config;
   const url = `https://www.xnxx.com/video-${videoId}/-`;
 
   try {

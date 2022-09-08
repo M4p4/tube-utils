@@ -29,3 +29,9 @@ export type RelatedKeywords = {
   keyword: string;
   popularity: number;
 };
+
+export type ParserConfig = {
+  userAgent: string;
+  useProxy: boolean;
+  proxies: string[];
+};

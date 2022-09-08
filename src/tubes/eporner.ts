@@ -1,10 +1,10 @@
-import { RelatedVideos, TubeSearch, TubeVideo } from '../types';
+import { ParserConfig, RelatedVideos, TubeSearch, TubeVideo } from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
   keyword: string,
   page: number,
-  userAgent: string
+  config: ParserConfig
 ): Promise<TubeSearch> => {
   let url = 'https://www.eporner.com/search/';
   if (page === 1) {
@@ -12,6 +12,8 @@ const search = async (
   } else {
     url += `${keyword.trim().replace(' ', '-')}/${page}`;
   }
+
+  const { userAgent } = config;
 
   try {
     const { $, data } = await loadHtml(url, userAgent);
@@ -69,8 +71,9 @@ const search = async (
 
 const video = async (
   videoId: string,
-  userAgent: string
+  config: ParserConfig
 ): Promise<TubeVideo> => {
+  const { userAgent } = config;
   const url = `https://www.eporner.com/video-${videoId}/-`;
   try {
     const { $, data } = await loadHtml(url, userAgent);
