@@ -67,7 +67,7 @@ const video = async (
   videoId: string,
   config: ParserConfig
 ): Promise<TubeVideo> => {
-  const url = `https://pornhub.com/view_video.php?viewkey=${videoId}`;
+  const url = `https://www.pornhub.com/view_video.php?viewkey=${videoId}`;
 
   try {
     const { $, data } = await loadHtml(url, config);
@@ -100,3 +100,11 @@ const pornhub = {
 };
 
 export default pornhub;
+
+//https://www.pornhub.com/view_video.php?viewkey=ph6196107385809
+pornhub.video('ph6196107385809', {
+  proxies: [],
+  useProxy: false,
+  userAgent:
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+});
