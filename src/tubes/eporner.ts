@@ -19,10 +19,8 @@ const search = async (
     url += `${keyword.trim().replace(' ', '-')}/${page}`;
   }
 
-  const { userAgent } = config;
-
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
     let videos = [] as RelatedVideos[];
 
     $('.mb').map((i, element) => {
@@ -79,10 +77,9 @@ const video = async (
   videoId: string,
   config: ParserConfig
 ): Promise<TubeVideo> => {
-  const { userAgent } = config;
   const url = `https://www.eporner.com/video-${videoId}/-`;
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
 
     const title = $('meta[property="og:title"]')
       .attr('content')
@@ -176,11 +173,49 @@ const video = async (
   }
 };
 
+const bypassEporner = (hash: string) => {
+  // this code bypass eporner security, hidden in js file
+  return (
+    parseInt(hash.substring(0, 8), 16).toString(36) +
+    parseInt(hash.substring(8, 16), 16).toString(36) +
+    parseInt(hash.substring(16, 24), 16).toString(36) +
+    parseInt(hash.substring(24, 32), 16).toString(36)
+  );
+};
+
 const videoSrc = async (
   videoId: string,
   config: ParserConfig
-): Promise<string> => {
-  return 'lol';
+): Promise<VideoSrc> => {
+  const url = `https://www.eporner.com/video-${videoId}/-`;
+  try {
+    const { data } = await loadHtml(url, config.userAgent);
+    const hash = extract_data(data, "EP.video.player.hash = '", "'");
+    const { data: rawData } = await loadHtml(
+      `https://www.eporner.com/xhr/video/MmsdAikXmdW?hash=${bypassEporner(
+        hash
+      )}&domain=www.eporner.com&pixelRatio=2&playerWidth=0&playerHeight=0&fallback=false&embed=false&supportedFormats=hls,dash,mp4`,
+      config.userAgent
+    );
+
+    if (rawData && rawData.available) {
+      console.log(rawData);
+      const res = {
+        lowRes:
+          rawData.sources.mp4['480p']?.src ||
+          rawData.sources.mp4['360p']?.src ||
+          rawData.sources.mp4['240p']?.src ||
+          '',
+        highRes: rawData.sources.mp4['720p HD']?.src || '',
+        hls: rawData.sources.hls?.['auto']?.src || '',
+      } as VideoSrc;
+      console.log(res);
+      return res;
+    }
+    return {} as VideoSrc;
+  } catch (e: any) {
+    console.error(e.message);
+  }
 };
 
 const eporner = {

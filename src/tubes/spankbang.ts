@@ -1,4 +1,10 @@
-import { RelatedVideos, TubeSearch, TubeVideo, ParserConfig } from '../types';
+import {
+  RelatedVideos,
+  TubeSearch,
+  TubeVideo,
+  ParserConfig,
+  VideoSrc,
+} from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
@@ -6,7 +12,6 @@ const search = async (
   page: number,
   config: ParserConfig
 ): Promise<TubeSearch> => {
-  const { userAgent } = config;
   let url = 'https://spankbang.com/s/';
   if (page === 1) {
     url += `${keyword.trim().replace(' ', '%20')}`;
@@ -15,7 +20,7 @@ const search = async (
   }
 
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
     let videos = [] as RelatedVideos[];
 
     $('.video-item').map((i, element) => {
@@ -59,10 +64,9 @@ const video = async (
   videoId: string,
   config: ParserConfig
 ): Promise<TubeVideo> => {
-  const { userAgent } = config;
   const url = `https://spankbang.com/${videoId}/video/-`;
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
 
     const title = $('h1').attr('title').trim();
     const thumb = $('meta[property="og:image"]').attr('content');
@@ -145,8 +149,24 @@ const video = async (
 const videoSrc = async (
   videoId: string,
   config: ParserConfig
-): Promise<string> => {
-  return 'lol';
+): Promise<VideoSrc> => {
+  const url = `https://spankbang.com/${videoId}/video/-`;
+  try {
+    const { data } = await loadHtml(url, config.userAgent);
+
+    const p240 = extract_data(data, "'240p': ['", "'],");
+    const p320 = extract_data(data, "'320p': ['", "'],");
+    const p480 = extract_data(data, "'480p': ['", "'],");
+    const p720 = extract_data(data, "'720p': ['", "'],");
+
+    const res = {
+      lowRes: p480 || p320 || p240,
+      highRes: p720,
+    } as VideoSrc;
+    return res;
+  } catch (e: any) {
+    console.error(e.message);
+  }
 };
 
 const spankbang = {

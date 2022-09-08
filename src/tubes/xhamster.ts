@@ -1,4 +1,10 @@
-import { RelatedVideos, TubeSearch, TubeVideo, ParserConfig } from '../types';
+import {
+  RelatedVideos,
+  TubeSearch,
+  TubeVideo,
+  ParserConfig,
+  VideoSrc,
+} from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
@@ -6,7 +12,6 @@ const search = async (
   page: number,
   config: ParserConfig
 ): Promise<TubeSearch> => {
-  const { userAgent } = config;
   let url = 'https://xhamster3.com/search/';
   if (page === 1) {
     url += `${keyword.trim().replace(' ', '+')}`;
@@ -15,7 +20,7 @@ const search = async (
   }
 
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
     let videos = [] as RelatedVideos[];
 
     $('.thumb-list__item').map((i, element) => {
@@ -59,10 +64,9 @@ const video = async (
   videoId: string,
   config: ParserConfig
 ): Promise<TubeVideo> => {
-  const { userAgent } = config;
   const url = `https://xhamster3.com/videos/-${videoId}`;
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
 
     const title = $('meta[property="og:title"]')
       .attr('content')
@@ -146,8 +150,11 @@ const video = async (
 const videoSrc = async (
   videoId: string,
   config: ParserConfig
-): Promise<string> => {
-  return 'lol';
+): Promise<VideoSrc> => {
+  const res = {
+    /* Protected by referer ...*/
+  } as VideoSrc;
+  return res;
 };
 
 const xhamster = {

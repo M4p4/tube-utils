@@ -1,4 +1,10 @@
-import { RelatedVideos, TubeSearch, TubeVideo, ParserConfig } from '../types';
+import {
+  RelatedVideos,
+  TubeSearch,
+  TubeVideo,
+  ParserConfig,
+  VideoSrc,
+} from '../types';
 import { extract_data, loadHtml } from '../utils';
 
 const search = async (
@@ -6,7 +12,6 @@ const search = async (
   page: number,
   config: ParserConfig
 ): Promise<TubeSearch> => {
-  const { userAgent } = config;
   const queryPage = page - 1;
   let url = 'https://www.xnxx.com/search/';
   if (queryPage === 0) {
@@ -16,7 +21,7 @@ const search = async (
   }
 
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
     let videos = [] as RelatedVideos[];
 
     $('.thumb-block').map((i, element) => {
@@ -64,11 +69,10 @@ const video = async (
   videoId: string,
   config: ParserConfig
 ): Promise<TubeVideo> => {
-  const { userAgent } = config;
   const url = `https://www.xnxx.com/video-${videoId}/-`;
 
   try {
-    const { $, data } = await loadHtml(url, userAgent);
+    const { $, data } = await loadHtml(url, config.userAgent);
 
     const title = $('meta[property="og:title"]').attr('content');
     const thumb = $('meta[property="og:image"]').attr('content');
@@ -138,8 +142,20 @@ const video = async (
 const videoSrc = async (
   videoId: string,
   config: ParserConfig
-): Promise<string> => {
-  return 'lol';
+): Promise<VideoSrc> => {
+  const url = `https://www.xnxx.com/video-${videoId}/-`;
+  try {
+    const { data } = await loadHtml(url, config.userAgent);
+    const res = {
+      lowRes: extract_data(data, "html5player.setVideoUrlLow('", "');"),
+      highRes: extract_data(data, "html5player.setVideoUrlHigh('", "');"),
+      hls: extract_data(data, "html5player.setVideoHLS('", "');"),
+    } as VideoSrc;
+    console.log(res);
+    return res;
+  } catch (e: any) {
+    console.error(e.message);
+  }
 };
 
 const xnxx = {
