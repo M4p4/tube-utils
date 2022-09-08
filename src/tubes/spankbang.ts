@@ -142,8 +142,16 @@ const video = async (
   }
 };
 
+const videoSrc = async (
+  videoId: string,
+  config: ParserConfig
+): Promise<string> => {
+  return 'lol';
+};
+
 const spankbang = {
   search,
   video,
+  videoSrc,
 };
 export default spankbang;

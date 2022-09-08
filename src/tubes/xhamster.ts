@@ -143,8 +143,16 @@ const video = async (
   }
 };
 
+const videoSrc = async (
+  videoId: string,
+  config: ParserConfig
+): Promise<string> => {
+  return 'lol';
+};
+
 const xhamster = {
   search,
   video,
+  videoSrc,
 };
 export default xhamster;

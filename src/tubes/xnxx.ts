@@ -135,9 +135,17 @@ const video = async (
   }
 };
 
+const videoSrc = async (
+  videoId: string,
+  config: ParserConfig
+): Promise<string> => {
+  return 'lol';
+};
+
 const xnxx = {
   search,
   video,
+  videoSrc,
 };
 
 export default xnxx;

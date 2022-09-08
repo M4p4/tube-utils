@@ -1,4 +1,10 @@
-import { RelatedVideos, TubeSearch, TubeVideo, ParserConfig } from '../types';
+import {
+  RelatedVideos,
+  TubeSearch,
+  TubeVideo,
+  ParserConfig,
+  VideoSrc,
+} from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
@@ -139,9 +145,29 @@ const video = async (
   }
 };
 
+const videoSrc = async (
+  videoId: string,
+  config: ParserConfig
+): Promise<VideoSrc> => {
+  const { userAgent } = config;
+  const url = `https://www.xvideos.com/video${videoId}/-`;
+  try {
+    const { $, data } = await loadHtml(url, userAgent);
+    const res = {
+      lowRes: extract_data(data, "html5player.setVideoUrlLow('", "');"),
+      highRes: extract_data(data, "html5player.setVideoUrlHigh('", "');"),
+      hls: extract_data(data, "html5player.setVideoHLS('", "');"),
+    } as VideoSrc;
+    return res;
+  } catch (e: any) {
+    console.error(e.message);
+  }
+};
+
 const xvideos = {
   search,
   video,
+  videoSrc,
 };
 
 export default xvideos;

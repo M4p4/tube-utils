@@ -35,3 +35,9 @@ export type ParserConfig = {
   useProxy: boolean;
   proxies: string[];
 };
+
+export type VideoSrc = {
+  lowRes?: string;
+  highRes?: string;
+  hls?: string;
+};

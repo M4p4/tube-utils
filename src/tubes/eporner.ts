@@ -1,4 +1,10 @@
-import { ParserConfig, RelatedVideos, TubeSearch, TubeVideo } from '../types';
+import {
+  ParserConfig,
+  RelatedVideos,
+  TubeSearch,
+  TubeVideo,
+  VideoSrc,
+} from '../types';
 import { loadHtml, extract_data } from '../utils';
 
 const search = async (
@@ -170,8 +176,16 @@ const video = async (
   }
 };
 
+const videoSrc = async (
+  videoId: string,
+  config: ParserConfig
+): Promise<string> => {
+  return 'lol';
+};
+
 const eporner = {
   search,
   video,
+  videoSrc,
 };
 export default eporner;
