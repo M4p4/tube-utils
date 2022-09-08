@@ -209,7 +209,6 @@ const videoSrc = async (
         highRes: rawData.sources.mp4['720p HD']?.src || '',
         hls: rawData.sources.hls?.['auto']?.src || '',
       } as VideoSrc;
-      console.log(res);
       return res;
     }
     return {} as VideoSrc;
