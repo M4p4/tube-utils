@@ -20,7 +20,7 @@ const search = async (
   }
 
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
     let videos = [] as RelatedVideos[];
 
     $('.mb').map((i, element) => {
@@ -79,7 +79,7 @@ const video = async (
 ): Promise<TubeVideo> => {
   const url = `https://www.eporner.com/video-${videoId}/-`;
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
 
     const title = $('meta[property="og:title"]')
       .attr('content')
@@ -189,13 +189,13 @@ const videoSrc = async (
 ): Promise<VideoSrc> => {
   const url = `https://www.eporner.com/video-${videoId}/-`;
   try {
-    const { data } = await loadHtml(url, config.userAgent);
+    const { data } = await loadHtml(url, config);
     const hash = extract_data(data, "EP.video.player.hash = '", "'");
     const { data: rawData } = await loadHtml(
       `https://www.eporner.com/xhr/video/MmsdAikXmdW?hash=${bypassEporner(
         hash
       )}&domain=www.eporner.com&pixelRatio=2&playerWidth=0&playerHeight=0&fallback=false&embed=false&supportedFormats=hls,dash,mp4`,
-      config.userAgent
+      config
     );
 
     if (rawData && rawData.available) {

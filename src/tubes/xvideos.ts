@@ -20,7 +20,7 @@ const search = async (
     url += `${keyword.trim().replace(' ', '+')}&p=${queryPage}`;
   }
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
     let videos = [] as RelatedVideos[];
 
     $('.thumb-block').map((i, element) => {
@@ -74,7 +74,7 @@ const video = async (
   const url = `https://www.xvideos.com/video${videoId}/-`;
 
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
 
     const title = $('meta[property="og:title"]').attr('content');
     const thumb = $('meta[property="og:image"]').attr('content');
@@ -149,7 +149,7 @@ const videoSrc = async (
 ): Promise<VideoSrc> => {
   const url = `https://www.xvideos.com/video${videoId}/-`;
   try {
-    const { data } = await loadHtml(url, config.userAgent);
+    const { data } = await loadHtml(url, config);
     const res = {
       lowRes: extract_data(data, "html5player.setVideoUrlLow('", "');"),
       highRes: extract_data(data, "html5player.setVideoUrlHigh('", "');"),

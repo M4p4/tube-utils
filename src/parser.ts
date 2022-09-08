@@ -29,6 +29,15 @@ export class Parser {
   ];
   constructor() {}
 
+  public setProxyies = (proxies: string[]) => {
+    this._config.proxies = proxies.slice();
+    this._config.useProxy = true;
+  };
+
+  public disableProxies = () => {
+    this._config.useProxy = false;
+  };
+
   private _mapTube = (tube: TUBES) => {
     switch (tube) {
       case TUBES.XNXX:

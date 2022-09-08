@@ -20,7 +20,7 @@ const search = async (
   }
 
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
     let videos = [] as RelatedVideos[];
 
     $('.thumb-list__item').map((i, element) => {
@@ -66,7 +66,7 @@ const video = async (
 ): Promise<TubeVideo> => {
   const url = `https://xhamster3.com/videos/-${videoId}`;
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
 
     const title = $('meta[property="og:title"]')
       .attr('content')

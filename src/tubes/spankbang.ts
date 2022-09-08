@@ -20,7 +20,7 @@ const search = async (
   }
 
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
     let videos = [] as RelatedVideos[];
 
     $('.video-item').map((i, element) => {
@@ -66,7 +66,7 @@ const video = async (
 ): Promise<TubeVideo> => {
   const url = `https://spankbang.com/${videoId}/video/-`;
   try {
-    const { $, data } = await loadHtml(url, config.userAgent);
+    const { $, data } = await loadHtml(url, config);
 
     const title = $('h1').attr('title').trim();
     const thumb = $('meta[property="og:image"]').attr('content');
@@ -152,7 +152,7 @@ const videoSrc = async (
 ): Promise<VideoSrc> => {
   const url = `https://spankbang.com/${videoId}/video/-`;
   try {
-    const { data } = await loadHtml(url, config.userAgent);
+    const { data } = await loadHtml(url, config);
 
     const p240 = extract_data(data, "'240p': ['", "'],");
     const p320 = extract_data(data, "'320p': ['", "'],");
