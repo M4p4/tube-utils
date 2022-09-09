@@ -3,6 +3,9 @@
     "module": "commonjs",
     "target": "es2015",
     "declaration": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist"
   },
   "include": ["src/**/*"]
