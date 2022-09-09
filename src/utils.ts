@@ -9,7 +9,40 @@ export const extract_data = (data: string, start: string, end: string) => {
   return data.substring(startPos, data.indexOf(end, startPos));
 };
 
+export const getProxyData = (useProxy, proxies: string[]) => {
+  //https://proxy:port@user:pass or https://proxy:port
+
+  if (proxies.length === 0 || !useProxy) return false as false;
+
+  let proxy = proxies[Math.floor(Math.random() * proxies.length)];
+  const useHttps = proxy.includes('https://');
+  proxy = proxy.replace('https://', '').replace('http://', '');
+  const hasAuth = proxy.includes('@');
+
+  if (hasAuth) {
+    const proxyData = proxy.split('@')[0].split(':');
+    const authData = proxy.split('@')[1].split(':');
+    return {
+      protocol: useHttps ? 'https' : 'http',
+      host: proxyData[0],
+      port: parseInt(proxyData[1]),
+      auth: {
+        username: authData[0],
+        password: authData[1],
+      },
+    };
+  }
+
+  const proxyData = proxy.split(':');
+  return {
+    protocol: useHttps ? 'https' : 'http',
+    host: proxyData[0],
+    port: parseInt(proxyData[1]),
+  };
+};
+
 export const loadHtml = async (url: string, config: ParserConfig) => {
+  console.log(getProxyData(config.useProxy, config.proxies));
   const res = await axios.get(url, {
     headers: {
       'User-Agent': config.userAgent,
@@ -18,6 +51,7 @@ export const loadHtml = async (url: string, config: ParserConfig) => {
       'Accept-Encoding': 'gzip, deflate, br',
       'Accept-Language': 'en-US,en;q=0.6',
     },
+    proxy: getProxyData(config.useProxy, config.proxies),
   });
 
   return { $: cheerio.load(res.data), data: res.data };

@@ -29,7 +29,7 @@ export class Parser {
   ];
   constructor() {}
 
-  public setProxyies = (proxies: string[]) => {
+  public setProxies = (proxies: string[]) => {
     this._config.proxies = proxies.slice();
     this._config.useProxy = true;
   };
