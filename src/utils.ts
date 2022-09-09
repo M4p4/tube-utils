@@ -42,7 +42,6 @@ export const getProxyData = (useProxy, proxies: string[]) => {
 };
 
 export const loadHtml = async (url: string, config: ParserConfig) => {
-  console.log(getProxyData(config.useProxy, config.proxies));
   const res = await axios.get(url, {
     headers: {
       'User-Agent': config.userAgent,
