@@ -84,15 +84,15 @@ export class Parser {
   };
 
   parseSearch = async (tube: TUBES, keyword: string, page: number = 1) => {
-    this._mapTube(tube).search(keyword, page, this._config);
+    return await this._mapTube(tube).search(keyword, page, this._config);
   };
 
   parseVideo = async (tube: TUBES, videoId: string) => {
-    this._mapTube(tube).video(videoId, this._config);
+    return await this._mapTube(tube).video(videoId, this._config);
   };
 
   parseVideoSrc = async (tube: TUBES, videoId: string) => {
-    this._mapTube(tube).videoSrc(videoId, this._config);
+    return await this._mapTube(tube).videoSrc(videoId, this._config);
   };
 }
 
