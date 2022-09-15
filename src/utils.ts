@@ -43,6 +43,8 @@ export const getProxyData = (useProxy, proxies: string[]) => {
 
 export const loadHtml = async (url: string, config: ParserConfig) => {
   const res = await axios.get(url, {
+    timeout: config.timeout,
+    withCredentials: true,
     headers: {
       'User-Agent': config.userAgent,
       Accept:

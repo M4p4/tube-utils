@@ -34,6 +34,7 @@ export type ParserConfig = {
   userAgent: string;
   useProxy: boolean;
   proxies: string[];
+  timeout: number;
 };
 
 export type VideoSrc = {

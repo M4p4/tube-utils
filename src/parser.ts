@@ -19,6 +19,7 @@ export class Parser {
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
     useProxy: false,
     proxies: [],
+    timeout: 3000,
   };
   private _allTubes = [
     TUBES.SPANKBANG,
