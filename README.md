@@ -1,4 +1,4 @@
-# tube-utils
+# Tube Utils
 
 Here you find functions to parse video data and search results data from popular tubes.
 
