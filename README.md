@@ -88,11 +88,3 @@ const keywords = await parser.getRelatedKeywords('foo');
 ]
 */
 ```
-
-### Currently supported tubes
-
-- xnxx
-- xvideos
-- xhamster
-- spankbang
-- eporner
