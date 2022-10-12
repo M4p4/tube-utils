@@ -63,12 +63,16 @@ export class Parser {
     let res = [] as string[];
 
     for (let tube of tubes) {
-      const tmpRes = (await this._mapTube(tube as unknown as TUBES).search(
-        keyword,
-        1,
-        this._config
-      )) as TubeSearch;
-      res = res.concat(tmpRes.relatedKeywords);
+      try {
+        const tmpRes = (await this._mapTube(tube as unknown as TUBES).search(
+          keyword,
+          1,
+          this._config
+        )) as TubeSearch;
+        if (tmpRes) res = res.concat(tmpRes.relatedKeywords);
+      } catch (e: any) {
+        console.error(e.message);
+      }
     }
 
     const filteredRelatedKeywords = [] as RelatedKeywords[];
