@@ -4,6 +4,7 @@ import xhamster from './tubes/xhamster';
 import spankbang from './tubes/spankbang';
 import eporner from './tubes/eporner';
 import hdzog from './tubes/hdzog';
+import porntrex from './tubes/porntrex';
 import { ParserConfig, RelatedKeywords, TubeSearch } from './types';
 
 export enum TUBES {
@@ -13,6 +14,7 @@ export enum TUBES {
   SPANKBANG,
   EPORNER,
   HDZOG,
+  PORNTREX,
 }
 
 export class Parser {
@@ -21,7 +23,7 @@ export class Parser {
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
     useProxy: false,
     proxies: [],
-    timeout: 3000,
+    timeout: 4000,
   };
   private _allTubes = [
     TUBES.SPANKBANG,
@@ -30,6 +32,7 @@ export class Parser {
     TUBES.XHAMSTER,
     TUBES.EPORNER,
     TUBES.HDZOG,
+    TUBES.PORNTREX,
   ];
   constructor() {}
 
@@ -56,6 +59,8 @@ export class Parser {
         return eporner;
       case TUBES.HDZOG:
         return hdzog;
+      case TUBES.PORNTREX:
+        return porntrex;
       default:
         throw new Error('Tube does not exists');
     }
