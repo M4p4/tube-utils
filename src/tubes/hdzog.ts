@@ -50,6 +50,7 @@ const search = async (
     return result;
   } catch (e: any) {
     console.error(e.message);
+    return { relatedKeywords: [], videos: [] };
   }
 };
 
@@ -77,7 +78,7 @@ const video = async (
     const title = apiData.video.title.trim();
 
     const thumb = apiData.video.thumb;
-    const poster = apiData.video.title.thumbsrc;
+    const poster = apiData.video.thumbsrc;
     const duration = apiData.video.duration;
 
     // tags

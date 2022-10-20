@@ -58,6 +58,7 @@ const search = async (
     return result;
   } catch (e: any) {
     console.error(e.message);
+    return { relatedKeywords: [], videos: [] };
   }
 };
 
@@ -82,6 +83,7 @@ const video = async (
       const tagUrl = $(element).attr('href');
       if (
         tagUrl.includes('/tags/') &&
+        !tag.includes('-') &&
         tag.length > 1 &&
         tags.indexOf(tag) == -1
       ) {

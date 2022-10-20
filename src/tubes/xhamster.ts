@@ -57,6 +57,7 @@ const search = async (
     return result;
   } catch (e: any) {
     console.error(e.message);
+    return { relatedKeywords: [], videos: [] };
   }
 };
 
