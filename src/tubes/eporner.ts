@@ -88,7 +88,7 @@ const video = async (
       .trim();
     const thumb = $('meta[property="og:image"]').attr('content');
     const poster = thumb.replace('_240', '_360');
-    const duration = $('span.vid-length').text().trim();
+    const duration = $('meta[property="og:duration"]').attr('content');
 
     // tags
     let tags = [];

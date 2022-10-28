@@ -74,7 +74,19 @@ const video = async (
     const thumb = 'https:' + $('meta[property="og:image"]').attr('content');
     const poster = thumb;
     const infoArray = $('div.info-block').text().trim().split('\n');
-    const duration = infoArray[infoArray.length - 1].trim();
+    const durationWrongFormat = infoArray[infoArray.length - 1].trim();
+    const times = durationWrongFormat
+      .replace('min', '')
+      .replace('sec', '')
+      .trim()
+      .split(' ');
+
+    let duration = 0;
+    if (times.length === 2) {
+      duration = +times[1] * 60 + +times[0];
+    } else {
+      duration = +times[0];
+    }
 
     // tags
     let tags = [];
@@ -141,7 +153,7 @@ const video = async (
     const video = {
       id: videoId,
       title,
-      duration,
+      duration: duration.toString(),
       thumb,
       poster,
       pornstars,

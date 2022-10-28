@@ -17,14 +17,16 @@ export enum TUBES {
   PORNTREX,
 }
 
+export const defaultParserConfig = {
+  userAgent:
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+  useProxy: false,
+  proxies: [],
+  timeout: 4000,
+};
+
 export class Parser {
-  private _config: ParserConfig = {
-    userAgent:
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
-    useProxy: false,
-    proxies: [],
-    timeout: 4000,
-  };
+  private _config: ParserConfig = defaultParserConfig;
   private _allTubes = [
     TUBES.SPANKBANG,
     TUBES.XNXX,

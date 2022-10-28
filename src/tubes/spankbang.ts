@@ -72,7 +72,7 @@ const video = async (
     const title = $('h1').attr('title').trim();
     const thumb = $('meta[property="og:image"]').attr('content');
     const poster = thumb.replace('w:500', 'w:800');
-    const duration = $('.hd-time span.i-length').text().trim();
+    const duration = $('meta[property="og:duration"]').attr('content');
     //const views = $('span.i-plays').text().replace('plays', '').trim();
 
     // tags

@@ -76,10 +76,18 @@ const video = async (
     );
 
     const title = apiData.video.title.trim();
-
     const thumb = apiData.video.thumb;
     const poster = apiData.video.thumbsrc;
-    const duration = apiData.video.duration;
+    const durationWrongFormat = apiData.video.duration;
+    const times = durationWrongFormat.split(':');
+    let duration = 0;
+    if (times.length === 3) {
+      duration = times[0] * 60 * 60 + times[1] * 60 + times[0];
+    } else if (times.length === 2) {
+      duration = times[1] * 60 + times[0];
+    } else {
+      duration = times[0];
+    }
 
     // tags
     let tags = [];
@@ -129,7 +137,7 @@ const video = async (
     const video = {
       id: videoId,
       title,
-      duration,
+      duration: duration.toString(),
       thumb,
       poster,
       pornstars,
