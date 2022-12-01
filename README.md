@@ -2,6 +2,16 @@
 
 Here you find functions to parse video data and search results data from popular tubes.
 
+List of supported Tubes.
+
+- eporner.com
+- hdzog.com
+- porntrex.com
+- spankbang.com
+- xhamster.com
+- xnxx.com
+- xvideos.com
+
 ### Usage
 
 First install per npm by running:
